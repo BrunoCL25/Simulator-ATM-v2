@@ -75,8 +75,16 @@ customers = []
 revenues = []
 costs = []
 profits = []
-ebitda = []
+ebitda_list = []
 
 cust = base_customers
 
 growth = [0, new_2027, new_2028, new_2029, new_2030]
+training = [0, training_2027, training_2028, training_2029, training_2030]
+
+staff = [0, staff_2027, staff_2028, staff_2029, staff_2030]
+marketing_vals = [0, marketing_2027, marketing_2028, marketing_2029, marketing_2030]
+consult_vals = [0, consult_2027, consult_2028, consult_2029, consult_2030]
+
+for i in range(len(years)):
+
