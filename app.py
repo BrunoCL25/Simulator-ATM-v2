@@ -88,3 +88,72 @@ consult_vals = [0, consult_2027, consult_2028, consult_2029, consult_2030]
 
 for i in range(len(years)):
 
+    cust = min(cust + growth[i], 300)
+    customers.append(cust)
+
+    # REVENUE
+    audit_rev = cust * hours_per_customer * price * (1 + upsell)
+    travel_rev = audit_rev * travel_rate
+    total_rev = audit_rev + travel_rev + training[i]
+
+    # COSTS
+    auditor_cost_total = cust * hours_per_customer * auditor_cost
+    staff_total = staff[i] * (1 + social_rate)
+    travel_cost = audit_rev * travel_cost_rate
+
+    total_cost = (
+        auditor_cost_total +
+        staff_total +
+        travel_cost +
+        marketing_vals[i] +
+        consult_vals[i] +
+        insurance +
+        structure
+    )
+
+    # RESULT
+    profit_value = total_rev - total_cost
+    ebitda_pct = (profit_value / total_rev) * 100 if total_rev > 0 else 0
+
+    revenues.append(total_rev)
+    costs.append(total_cost)
+    profits.append(profit_value)
+    ebitda_list.append(ebitda_pct)
+
+# ========================
+# TABLE
+# ========================
+df = pd.DataFrame({
+    "Year": years,
+    "Customers": customers,
+    "Revenue": revenues,
+    "Costs": costs,
+    "Profit": profits,
+    "EBITDA %": ebitda_list
+})
+
+st.subheader("P&L Table")
+st.dataframe(df)
+
+# ========================
+# CHARTS
+# ========================
+st.subheader("Profit Evolution")
+
+fig, ax = plt.subplots()
+ax.plot(years, profits, marker='o')
+ax.axhline(374000, linestyle='--', color='red')
+ax.set_title("Profit Evolution")
+st.pyplot(fig)
+
+st.subheader("Revenue Breakdown")
+
+fig2, ax2 = plt.subplots()
+ax2.bar(years, revenues)
+st.pyplot(fig2)
+
+st.subheader("Cost Breakdown")
+
+fig3, ax3 = plt.subplots()
+ax3.bar(years, costs)
+st.pyplot(fig3)
